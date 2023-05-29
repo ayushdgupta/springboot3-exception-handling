@@ -1,0 +1,21 @@
+server:
+  port: 9090
+  error:                                          # these properties are used to customize the exception message (JSON)
+    include-message: ALWAYS                       # on the client side.
+    include-binding-errors: ALWAYS
+    include-stacktrace: ON_PARAM
+    include-exception: true
+    whitelabel:
+      enabled: false
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/student_db
+    username: postgres
+    password: ${db_pass}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
