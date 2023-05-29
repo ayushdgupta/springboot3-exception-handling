@@ -1,5 +1,6 @@
 package com.guptaji.customexceptionhandling.springboot3customexceptionhandling.service;
 
+import com.guptaji.customexceptionhandling.springboot3customexceptionhandling.customExceptions.ResourceNotFoundException;
 import com.guptaji.customexceptionhandling.springboot3customexceptionhandling.entity.Student;
 import com.guptaji.customexceptionhandling.springboot3customexceptionhandling.repository.StudentRepo;
 
@@ -18,14 +19,31 @@ public class StudentServiceImpl implements StudentService {
   @Autowired private StudentRepo studentRepo;
 
   @Override
-  public Student getStudentByRoll(int roll) {
-    LOG.info("getStudentByRoll API Hit");
+  public Student getStudentByRollDefaultExceptionHandling(int roll) {
+    LOG.info("getStudentByRollDefaultExceptionHandling API Hit");
     return studentRepo
         .findById(roll)
         .orElseThrow(
             () -> {
               LOG.error("No Student found for the roll no {}", roll);
               return new NoSuchElementException("No Data found for the roll no. " + roll);
+            });
+  }
+
+  @Override
+  public Student addNewStudentData(Student student) {
+    return studentRepo.save(student);
+  }
+
+  @Override
+  public Student getStudentByRollUsingCustomExceptionHandling(int roll) {
+    LOG.info("getStudentByRollDefaultExceptionHandling API Hit");
+    return studentRepo
+        .findById(roll)
+        .orElseThrow(
+            () -> {
+              LOG.error("No Student found for the roll no {}", roll);
+              throw new ResourceNotFoundException("Student", "RollNo", Integer.toString(roll));
             });
   }
 }

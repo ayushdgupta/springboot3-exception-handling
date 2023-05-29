@@ -33,3 +33,16 @@ server:
 - With the above properties also we can customize our error response upto a certain extent but still that method also has
 some limits e.g. we can change the message, but we can't change the error header and we can n't change the response status,
 everytime the status is going as 500 that we can't change.
+
+### 2. Using Custom exceptions with @ResponseStatus
+
+- Here we create one custom exception and extend it with RuntimeException and then use _@ResposnseStatus()_ on the exception class.
+- @ResponseStatus, in combination with the server.error configuration properties, allows us to manipulate almost all the fields in our Spring-defined error response payload.
+- But here also we can't change the structure of the response (Response header).
+- Below API uses this method -  
+`getStudentByRollNoWithCustomException(@PathVariable("rollNo") int roll)`
+
+
+## Follow below links for exception handling 
+1. https://reflectoring.io/spring-boot-exception-handling/
+2. 

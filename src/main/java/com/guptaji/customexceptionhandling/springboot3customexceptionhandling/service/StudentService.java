@@ -4,5 +4,9 @@ import com.guptaji.customexceptionhandling.springboot3customexceptionhandling.en
 
 public interface StudentService {
 
-  Student getStudentByRoll(int roll);
+  Student getStudentByRollDefaultExceptionHandling(int roll);
+
+  Student addNewStudentData(Student student);
+
+  Student getStudentByRollUsingCustomExceptionHandling(int roll);
 }
