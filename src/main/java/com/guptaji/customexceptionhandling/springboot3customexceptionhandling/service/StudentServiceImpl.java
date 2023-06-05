@@ -2,6 +2,7 @@ package com.guptaji.customexceptionhandling.springboot3customexceptionhandling.s
 
 import com.guptaji.customexceptionhandling.springboot3customexceptionhandling.customExceptions.ResourceNotFoundException;
 import com.guptaji.customexceptionhandling.springboot3customexceptionhandling.customExceptions.StudentNotFoundException;
+import com.guptaji.customexceptionhandling.springboot3customexceptionhandling.customExceptions.StudentNotFromRequiredCollegeException;
 import com.guptaji.customexceptionhandling.springboot3customexceptionhandling.entity.Student;
 import com.guptaji.customexceptionhandling.springboot3customexceptionhandling.repository.StudentRepo;
 
@@ -10,12 +11,16 @@ import java.util.NoSuchElementException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
   Logger LOG = LogManager.getLogger(StudentServiceImpl.class);
+
+  @Value("${college_allowed}")
+  private String college;
 
   private static final int offset = 10;
 
@@ -78,5 +83,14 @@ public class StudentServiceImpl implements StudentService {
               return new StudentNotFoundException(
                   "StudentService", "RollNo", Integer.toString(roll));
             });
+  }
+
+  @Override
+  public Boolean saveStudentDataForACollegeOnly(Student student) {
+    if (student.getCollegeName().equalsIgnoreCase(college)) {
+      studentRepo.save(student);
+      return true;
+    }
+    throw new StudentNotFromRequiredCollegeException(student.getName(), college);
   }
 }

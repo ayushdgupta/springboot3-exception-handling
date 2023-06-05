@@ -86,9 +86,17 @@ public class StudentController {
   @GetMapping("/customExceptionWithRestControllerAdvice/{rollNo}")
   public ResponseEntity<?> getStudentByRollNoWithRestControllerAdvice(
       @PathVariable("rollNo") int roll) {
-    LOG.info("Hit getStudentByRollNo API");
+    LOG.info("Hit getStudentByRollNoWithRestControllerAdvice API");
     Student studentData = studentService.getStudentByRollUsingRestControllerAdvice(roll);
     LOG.info("Found the data for the id {}", roll);
     return new ResponseEntity<>(studentData, HttpStatus.FOUND);
+  }
+
+  // Below method will add only student from college defined in environment variables
+  @PostMapping("/createStudentInDBForACollegeOnly")
+  public ResponseEntity<?> insertStudentDataForACollegeOnly(@RequestBody @Valid Student student) {
+    LOG.info("Hit insertStudentDataForACollegeOnly API");
+    Boolean result = studentService.saveStudentDataForACollegeOnly(student);
+    return new ResponseEntity<>("Done dana done done", HttpStatus.CREATED);
   }
 }

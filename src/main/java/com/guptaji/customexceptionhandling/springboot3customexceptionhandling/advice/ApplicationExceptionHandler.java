@@ -1,19 +1,29 @@
 package com.guptaji.customexceptionhandling.springboot3customexceptionhandling.advice;
 
 import com.guptaji.customexceptionhandling.springboot3customexceptionhandling.customExceptions.StudentNotFoundException;
+import com.guptaji.customexceptionhandling.springboot3customexceptionhandling.customExceptions.StudentNotFromRequiredCollegeException;
+import com.guptaji.customexceptionhandling.springboot3customexceptionhandling.dto.ErrorMessage;
 
+import java.net.URI;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.guptaji.customexceptionhandling.springboot3customexceptionhandling.dto.ErrorMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 @RestControllerAdvice
 // @ControllerAdvice
 public class ApplicationExceptionHandler {
+
+  @Value("${college_allowed}")
+  private String college;
+
+  @Value("${server.port}")
+  private int port;
 
   /*
      In below error response we are sending a map, we can also send any other response header, as we are using
@@ -40,16 +50,16 @@ public class ApplicationExceptionHandler {
 
      By Adding @ResponseStatus we are getting the HTTPStatus code correctly in the response
   */
-    @ExceptionHandler(StudentNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorMessage handleStudentNotFoundException(Exception e) {
-      ErrorMessage em = new ErrorMessage();
-      em.setErrorMessage(e.getMessage());
-      em.setErrorStatus(HttpStatus.NOT_FOUND);
-      //    If we don't want to send error trace then comment it
-      //    em.setErrorTrace(e.getStackTrace());
-      return em;
-    }
+  @ExceptionHandler(StudentNotFoundException.class)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  public ErrorMessage handleStudentNotFoundException(Exception e) {
+    ErrorMessage em = new ErrorMessage();
+    em.setErrorMessage(e.getMessage());
+    em.setErrorStatus(HttpStatus.NOT_FOUND);
+    //    If we don't want to send error trace then comment it
+    //    em.setErrorTrace(e.getStackTrace());
+    return em;
+  }
 
   /*
 
@@ -61,4 +71,24 @@ public class ApplicationExceptionHandler {
     return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
   }
    */
+
+  /*
+     In above method we create one DTO and then returned our response but here we will use the standard class
+     provided by SpringBoot3 'ProblemDetail' to send the error response.
+  */
+  @ExceptionHandler(StudentNotFromRequiredCollegeException.class)
+  public ProblemDetail handleStudentNotFromReqCollege(Exception e) {
+    ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_ACCEPTABLE);
+    problemDetail.setDetail(e.getMessage());
+    problemDetail.setInstance(
+        URI.create("http://localhost:9090/student/createStudentInDBForACollegeOnly/ERROR"));
+    problemDetail.setStatus(404);
+    problemDetail.setTitle("Add Student from a particular college");
+    // we can also set some custom fields
+    problemDetail.setProperty("Solution possible", "send student with college name " + college);
+    problemDetail.setProperty("port", port);
+    problemDetail.setProperty("Timestamp", Instant.now());
+
+    return problemDetail;
+  }
 }

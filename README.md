@@ -57,6 +57,16 @@ change the response header as well then we need to use @ResponseBody.
 2. public ResponseEntity<?> getStudentByRollNoWithRestControllerAdvice
 ```
 
+### 4. ProblemDetail class
+
+- Generally we first create a DTO and then we set that DTO in our ControllerAdvice class then we send that dto object in the response.
+- But in SpringBoot3 we are provided with a standard class for this purpose which is 'ProblemDetail'.
+- This class provide various standard methods to send the exception details in output like title, status etc. and if we want to send any custom fields that also we can send using 'setProperty()' function.
+- Below API in our Controller uses ProblemDetail class -
+```
+public ResponseEntity<?> insertStudentDataForACollegeOnly(@RequestBody @Valid Student student)
+```
+
 ## Follow below links for exception handling 
 1. https://reflectoring.io/spring-boot-exception-handling/
 2. https://codersee.com/exception-handling-with-restcontrolleradvice-and-exceptionhandler/

@@ -13,4 +13,6 @@ public interface StudentService {
   Boolean saveStudentDataInDB(Student student);
 
   Student getStudentByRollUsingRestControllerAdvice(int roll);
+
+  Boolean saveStudentDataForACollegeOnly(Student student);
 }
