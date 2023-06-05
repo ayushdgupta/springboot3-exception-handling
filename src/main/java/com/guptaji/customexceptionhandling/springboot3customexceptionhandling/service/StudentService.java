@@ -9,4 +9,8 @@ public interface StudentService {
   Student addNewStudentData(Student student);
 
   Student getStudentByRollUsingCustomExceptionHandling(int roll);
+
+  Boolean saveStudentDataInDB(Student student);
+
+  Student getStudentByRollUsingRestControllerAdvice(int roll);
 }

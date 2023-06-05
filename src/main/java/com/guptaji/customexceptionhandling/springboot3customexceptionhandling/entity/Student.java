@@ -3,19 +3,30 @@ package com.guptaji.customexceptionhandling.springboot3customexceptionhandling.e
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.*;
 
+// All the validations like @NotNull, @NotBlank etc. are on our entity level only there will be no
+// change on DB
+// level.
 @Entity
 @Table(name = "studentExceptionHandling")
 public class Student {
 
   @Id public int rollNo;
 
+  @NotNull(message = "Baap ne jo naam diya hai vo bhej bhootni ke")
   public String name;
 
+  @Email(message = "Sahi email dal bhootni ke")
   public String email;
 
+  @NotNull
+  @Pattern(regexp = "(^$|[0-9]{10})")
   public String phoneNo;
 
+  @NotBlank(
+      message =
+          "Mera aadhar meri pehchaan if you don't have aadhar then you are rohingya bhaag yha se")
   public String aadharNo;
 
   public String collegeName;
