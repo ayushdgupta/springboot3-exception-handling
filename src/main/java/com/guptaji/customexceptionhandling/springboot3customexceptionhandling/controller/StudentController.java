@@ -67,7 +67,8 @@ public class StudentController {
   }
 
   // M3-> Here we are using @RestControllerAdvice and @ExceptionHandler. In the first method also we
-  // use the same.
+  // use the same. but here @RestControllerAdvice is used for @Valid method only. this method will
+  // return 'MethodArgumentNotValidException'.
   @PostMapping("/createStudentInDBForTestRestControllerAdvice")
   public ResponseEntity<?> insertStudentData(@RequestBody @Valid Student student) {
     LOG.info("Hit insertStudentData API");
@@ -79,10 +80,8 @@ public class StudentController {
   }
 
   // In below API we will try to fetch the data of a student and if the student not found then we
-  // will throw a
-  // custom exception which will be handled in the @RestControllerAdvice and we will send a custom
-  // response along with
-  // the HTTP Status.
+  // will throw a custom exception which will be handled in the @RestControllerAdvice and
+  // we will send a custom response along with the HTTP Status.
   @GetMapping("/customExceptionWithRestControllerAdvice/{rollNo}")
   public ResponseEntity<?> getStudentByRollNoWithRestControllerAdvice(
       @PathVariable("rollNo") int roll) {
@@ -92,7 +91,9 @@ public class StudentController {
     return new ResponseEntity<>(studentData, HttpStatus.FOUND);
   }
 
-  // Below method will add only student from college defined in environment variables
+  // Below method will add only student from college defined in environment variables. this is for
+  // ProblemDetail
+  // Demo.
   @PostMapping("/createStudentInDBForACollegeOnly")
   public ResponseEntity<?> insertStudentDataForACollegeOnly(@RequestBody @Valid Student student) {
     LOG.info("Hit insertStudentDataForACollegeOnly API");

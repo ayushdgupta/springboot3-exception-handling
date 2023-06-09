@@ -82,7 +82,7 @@ public class ApplicationExceptionHandler {
     problemDetail.setDetail(e.getMessage());
     problemDetail.setInstance(
         URI.create("http://localhost:9090/student/createStudentInDBForACollegeOnly/ERROR"));
-    problemDetail.setStatus(404);
+    //    problemDetail.setStatus(404);     // This line is overriding the above status.
     problemDetail.setTitle("Add Student from a particular college");
     // we can also set some custom fields
     problemDetail.setProperty("Solution possible", "send student with college name " + college);
