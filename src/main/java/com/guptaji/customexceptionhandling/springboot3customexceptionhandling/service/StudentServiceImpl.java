@@ -61,7 +61,8 @@ public class StudentServiceImpl implements StudentService {
     LOG.info("saveStudentDataInDB Service Hit");
     Student savedStudentData = studentRepo.save(student);
     // Here I am deliberately throwing the exception by adding one offset to test
-    // @RestControllerAdvice
+    // @RestControllerAdvice like ResourceNotFoundException is not handled in Advice class so
+    // Error response should not be changed.
     studentRepo
         .findById(student.getRollNo() + offset)
         .orElseThrow(
@@ -91,6 +92,7 @@ public class StudentServiceImpl implements StudentService {
       studentRepo.save(student);
       return true;
     }
+    LOG.error("Student not from the required college {}", college);
     throw new StudentNotFromRequiredCollegeException(student.getName(), college);
   }
 }
